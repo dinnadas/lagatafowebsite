@@ -1,0 +1,10 @@
+_____________________________
+|Photos          | Size     |
+|________________|__________|
+|Mayor's Photo - 1366 x 765 | <-- at the booking section
+|officials Photo - 500 x 500| <-- at officials section
+|clients photo - 100 x 100  | <-- (optional)
+|some of laga tafo pics - 600 x 400| <-- for gallery
+|
+|
+|

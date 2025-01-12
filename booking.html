@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Gallary</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Nunito:wght@600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/animate/animate.min.css" rel="stylesheet">
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="css/style.css" rel="stylesheet">
+</head>
+
+<style>
+    .container-body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    .gallery {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        padding: 20px;
+    }
+
+    .card {
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        transition: transform 0.3s ease;
+    }
+
+    .card img {
+        width: 100%;
+        height: auto;
+        display: block;
+        transition: filter 0.3s ease;
+        /* For smooth blur transition */
+    }
+
+    .card:hover img {
+        filter: blur(4px);
+        /* Applies a blur effect to the image on hover */
+    }
+
+    .card .hover-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: white;
+        font-size: 18px;
+        font-weight: bold;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        /* Smooth fade-in for text */
+        pointer-events: none;
+        /* Ensures the text doesn't interfere with clicking */
+    }
+
+    .card:hover .hover-text {
+        opacity: 1;
+        /* Makes the text visible on hover */
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
+    .modal.active {
+        display: flex;
+    }
+
+    .modal-content {
+        position: relative;
+        background: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        max-width: 90%;
+        max-height: 90%;
+        overflow: hidden;
+    }
+
+    .modal img {
+        max-width: 90%;
+        /* Ensures the image doesn't exceed 70% of the modal width */
+        max-height: 70vh;
+        /* Ensures the image height is restricted to 60% of the viewport height */
+        object-fit: contain;
+        /* Maintains the aspect ratio of the image */
+        margin: auto;
+        /* Centers the image horizontally */
+        display: block;
+    }
+
+    .close-button,
+    .arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(255, 255, 255, 0.8);
+        border: none;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .close-button {
+        top: 10px;
+        right: 10px;
+        transform: none;
+    }
+
+    .arrow.left {
+        left: 10px;
+    }
+
+    .arrow.right {
+        right: 10px;
+    }
+
+    .download-button {
+        display: block;
+        margin: 20px auto 0;
+        padding: 10px 20px;
+        background-color: #86B817;
+        color: #fff;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        text-decoration: none;
+        font-size: 16px;
+        transition: 0.5s ease-in-out;
+    }
+
+    .download-button:hover {
+        color: white;
+        background-color: #52b817e3;
+    }
+</style>
+
+<body>
+    <!-- Spinner Start -->
+    <div id="spinner"
+        class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+    <!-- Spinner End -->
+
+
+    <!-- Topbar Start -->
+    <div class="container-fluid bg-dark px-5 d-none d-lg-block">
+        <div class="row gx-0">
+            <div class="col-lg-8 text-center text-lg-start mb-2 mb-lg-0">
+                <div class="d-inline-flex align-items-center" style="height: 45px;">
+                    <small class="me-3 text-light"><i class="fa fa-map-marker-alt me-2"></i>LAGA TAFO, OROMIYA, ETHIOPIA
+                    </small>
+                    <small class="me-3 text-light"><i class="fa fa-phone-alt me-2"></i>+25111111111111 </small>
+                    <small class="text-light"><i class="fa fa-envelope-open me-2"></i>
+                        legetafolegedadi@gmail.com</small>
+                </div>
+            </div>
+            <div class="col-lg-4 text-center text-lg-end">
+                <div class="d-inline-flex align-items-center" style="height: 45px;">
+                    <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href=""><i
+                            class="fab fa-twitter fw-normal"></i></a>
+                    <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href=""><i
+                            class="fab fa-facebook-f fw-normal"></i></a>
+                    <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href=""><i
+                            class="fab fa-linkedin-in fw-normal"></i></a>
+                    <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href=""><i
+                            class="fab fa-instagram fw-normal"></i></a>
+                    <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle" href=""><i
+                            class="fab fa-youtube fw-normal"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Topbar End -->
+
+
+    <!-- Navbar & Hero Start -->
+    <div class="container-fluid position-relative p-0">
+        <nav class="navbar navbar-expand-lg navbar-light px-4 px-lg-5 py-3 py-lg-0">
+            <a href="" class="navbar-brand p-0">
+                <h1 class="text-primary m-0"><i class="fa fa-map-marker-alt me-3"></i>Laga Tafo</h1>
+                <!-- <img src="img/logo.png" alt="Logo"> -->
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                <span class="fa fa-bars"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <div class="navbar-nav ms-auto py-0">
+                    <a href="index.html" class="nav-item nav-link">Home</a>
+                    <a href="about.html" class="nav-item nav-link">About</a>
+                    <a href="service.html" class="nav-item nav-link">Sectors</a>
+                    <a href="booking.html" class="nav-item nav-link active">Gallary</a>
+
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle " data-bs-toggle="dropdown">Language</a>
+                        <div class="dropdown-menu m-0">
+                            <a href="bookingaffanoromo.html" class="dropdown-item">Affan Oromo</a>
+                            <a href="bookingamharic.html" class="dropdown-item ">Amharic</a>
+
+                        </div>
+                    </div>
+                    <a href="contact.html" class="nav-item nav-link">Contact</a>
+                </div>
+                <a href="" class="btn btn-primary rounded-pill py-2 px-4">Register</a>
+            </div>
+        </nav>
+
+        <div class="container-fluid bg-primary py-5 mb-5 hero-header">
+            <div class="container py-5">
+                <div class="row justify-content-center py-5">
+                    <div class="col-lg-10 pt-lg-5 mt-lg-5 text-center">
+                        <h1 class="display-3 text-white animated slideInDown">Gallary</h1>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb justify-content-center">
+                                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                <li class="breadcrumb-item"><a href="#">Pages</a></li>
+                                <li class="breadcrumb-item text-white active" aria-current="page"><a href="#">Gallary</a></li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Navbar & Hero End -->
+    <div class="container-body">
+        <!-- Leaders -->
+        <div class="gallery">
+            <div class="card"
+                onclick="openGallery(['img/gallary/leaders/1.jpg', 'img/gallary/leaders/2.jpg', 'img/gallary/leaders/3.jpg', 'img/gallary/leaders/4.jpg', 'img/gallary/leaders/5.jpg', 'img/gallary/leaders/6.jpg'])">
+                <img src="img/gallary/leaders/1.jpg" alt="Gallery 1">
+                <div class="hover-text">More</div>
+            </div>
+            <!-- shagar city -->
+            <div class="card"
+                onclick="openGallery(['img/gallary/sheger city/1.jpg', 'img/gallary/sheger city/2.jpg', 'img/gallary/sheger city/3.jpg', 'img/gallary/sheger city/4.jpg', 'img/gallary/sheger city/5.jpg', 'img/gallary/sheger city/6.jpg', 'img/gallary/sheger city/7.jpg', 'img/gallary/sheger city/8.jpg', 'img/gallary/sheger city/9.jpg', 'img/gallary/sheger city/10.jpg', 'img/gallary/sheger city/11.jpg', 'img/gallary/sheger city/12.jpg', 'img/gallary/sheger city/13.jpg', 'img/gallary/sheger city/14.jpg', 'img/gallary/sheger city/15.jpg', 'img/gallary/sheger city/16.jpg'])">
+                <img src="img/gallary/sheger city/1.jpg" alt="Gallery 2">
+                <div class="hover-text">More</div>
+            </div>
+            <!-- ccd -->
+            <div class="card"
+                onclick="openGallery(['img/gallary/ccd/1.jpg', 'img/gallary/ccd/2.jpg', 'img/gallary/ccd/3.jpg', 'img/gallary/ccd/4.jpg', 'img/gallary/ccd/5.jpg', 'img/gallary/ccd/6.jpg', 'img/gallary/ccd/7.jpg', 'img/gallary/ccd/8.jpg', 'img/gallary/ccd/9.jpg', 'img/gallary/ccd/10.jpg', 'img/gallary/ccd/11.jpg', 'img/gallary/ccd/12.jpg', 'img/gallary/ccd/13.jpg', 'img/gallary/ccd/14.jpg'])">
+                <img src="img/gallary/ccd/1.jpg" alt="Gallery 3">
+                <div class="hover-text">More</div>
+            </div>
+            <!-- constraction -->
+            <div class="card"
+                onclick="openGallery(['img/gallary/construction/1.jpg', 'img/gallary/construction/2.jpg', 'photo4-3.jpg'])">
+                <img src="img/gallary/construction/1.jpg" alt="Gallery 4">
+                <div class="hover-text">More</div>
+            </div>
+
+
+        </div>
+
+        <div class="modal" id="photoModal">
+            <div class="modal-content">
+                <button class="close-button" onclick="closeGallery()">&times;</button>
+                <button class="arrow left" onclick="previousPhoto()">&#8249;</button>
+                <img id="modalImage" src="" alt="Photo">
+                <a id="downloadButton" class="download-button" href="#" download>Download Photo</a>
+                <button class="arrow right" onclick="nextPhoto()">&#8250;</button>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Footer Start -->
+    <div class="container-fluid bg-dark text-light footer pt-5 mt-5 wow fadeIn" data-wow-delay="0.1s">
+        <div class="container py-5">
+            <div class="row g-5">
+                <div class="col-lg-3 col-md-6">
+                    <h4 class="text-white mb-3">Lega Dadi Lega Tafo</h4>
+                    <a class="btn btn-link" href="">Home</a>
+                    <a class="btn btn-link" href="">About Us</a>
+                    <a class="btn btn-link" href="">Sectors</a>
+                    <a class="btn btn-link" href="">Contact Us</a>
+                    <a class="btn btn-link" href="">Register</a>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h4 class="text-white mb-3">Contact</h4>
+                    <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>LAGA TAFO, OROMIYA, ETHIOPIA</p>
+                    <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>+251900000000</p>
+                    <p class="mb-2"><i class="fa fa-envelope me-3"></i>lagatafolagadadi@gmail.com</p>
+                    <div class="d-flex pt-2">
+                        <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-twitter"></i></a>
+                        <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-facebook-f"></i></a>
+                        <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-youtube"></i></a>
+                        <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h4 class="text-white mb-3">Gallery</h4>
+                    <div class="row g-2 pt-2">
+                        <div class="col-4">
+                            <img class="img-fluid bg-light p-1" src="img/package-1.jpg" alt="">
+                        </div>
+                        <div class="col-4">
+                            <img class="img-fluid bg-light p-1" src="img/package-2.jpg" alt="">
+                        </div>
+                        <div class="col-4">
+                            <img class="img-fluid bg-light p-1" src="img/package-3.jpg" alt="">
+                        </div>
+                        <div class="col-4">
+                            <img class="img-fluid bg-light p-1" src="img/package-2.jpg" alt="">
+                        </div>
+                        <div class="col-4">
+                            <img class="img-fluid bg-light p-1" src="img/package-3.jpg" alt="">
+                        </div>
+                        <div class="col-4">
+                            <img class="img-fluid bg-light p-1" src="img/package-1.jpg" alt="">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h4 class="text-white mb-3">Newsletter</h4>
+                    <p>Keep up-to-date with the latest news, events, and announcements from Laga Tafo Laga Dadi Sub
+                        City. From community programs to important government updates, we ensure you’re always informed.
+                    </p>
+                    <div class="position-relative mx-auto" style="max-width: 400px;">
+                        <input class="form-control border-primary w-100 py-3 ps-4 pe-5" type="text"
+                            placeholder="Your email">
+                        <button type="button"
+                            class="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2">SignUp</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="copyright">
+                <div class="row">
+                    <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                        &copy; <a class="border-bottom" href="#">Lagatafolagadadi</a>, All Right Reserved.
+
+                        <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
+                        Designed By <a class="border-bottom" href="">TerraMind Technologies</a>
+                    </div>
+                    <div class="col-md-6 text-center text-md-end">
+                        <div class="footer-menu">
+                            <a href="index.html">Home</a>
+                            <a href="https://t.me/dinnadas">Help</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Footer End -->
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/wow/wow.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="lib/tempusdominus/js/moment.min.js"></script>
+    <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
+    <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="js/main.js"></script>
+
+
+
+    <script>
+        let currentPhotos = [];
+        let currentIndex = 0;
+
+        function openGallery(photos) {
+            currentPhotos = photos;
+            currentIndex = 0;
+            updateModalPhoto();
+            document.getElementById('photoModal').classList.add('active');
+        }
+
+        function closeGallery() {
+            document.getElementById('photoModal').classList.remove('active');
+        }
+
+        function updateModalPhoto() {
+            const modalImage = document.getElementById('modalImage');
+            const downloadButton = document.getElementById('downloadButton');
+            modalImage.src = currentPhotos[currentIndex];
+            downloadButton.href = currentPhotos[currentIndex];
+            downloadButton.download = currentPhotos[currentIndex].split('/').pop();
+        }
+
+        function nextPhoto() {
+            currentIndex = (currentIndex + 1) % currentPhotos.length;
+            updateModalPhoto();
+        }
+
+        function previousPhoto() {
+            currentIndex = (currentIndex - 1 + currentPhotos.length) % currentPhotos.length;
+            updateModalPhoto();
+        }
+    </script>
+</body>
+
+</html>
