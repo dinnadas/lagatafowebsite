@@ -4,7 +4,6 @@ anyio==4.7.0
 APScheduler==3.6.3
 astunparse==1.6.3
 beautifulsoup4==4.12.3
-blis==1.1.0
 cachetools==4.2.2
 catalogue==2.0.10
 certifi==2024.8.30
@@ -12,7 +11,6 @@ cffi==1.17.1
 charset-normalizer==3.4.0
 click==8.1.7
 cloudpathlib==0.20.0
-cohere==5.13.3
 colorama==0.4.6
 comtypes==1.4.8
 confection==0.1.5
@@ -55,7 +53,9 @@ ml-dtypes==0.4.1
 murmurhash==1.0.11
 namex==0.0.8
 nltk==3.9.1
-numpy==1.24.3  # Compatible version for all dependencies
+numpy>=1.26.0,<=2.0
+blis==1.1.0
+cohere==5.13.3
 openai==1.61.1
 opt_einsum==3.4.0
 optree==0.13.1
