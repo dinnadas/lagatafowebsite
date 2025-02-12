@@ -53,14 +53,10 @@ ml-dtypes==0.4.1
 murmurhash==1.0.11
 namex==0.0.8
 nltk==3.9.1
-numpy>=1.26.0,<=2.0
-blis==1.1.0
-cohere==5.13.3
 openai==1.61.1
 opt_einsum==3.4.0
 optree==0.13.1
 packaging==24.2
-pandas==2.2.3
 parameterized==0.9.0
 preshed==3.0.9
 proto-plus==1.25.0
@@ -83,7 +79,12 @@ requests==2.32.3
 rich==13.9.4
 rsa==4.9
 scikit-learn==1.5.2
+numpy==1.24.3
+tensorflow==2.13.0
 scipy==1.14.1
+pandas==2.2.3
+blis==1.1.0
+cohere==5.13.3
 shellingham==1.5.4
 six==1.17.0
 smart-open==7.1.0
@@ -99,7 +100,6 @@ srt==3.5.3
 tensorboard==2.18.0
 tensorboard-data-server==0.7.2
 tensorflow-io-gcs-filesystem==0.31.0
-tensorflow==2.13.0
 termcolor==2.5.0
 thinc==8.3.3
 threadpoolctl==3.5.0
